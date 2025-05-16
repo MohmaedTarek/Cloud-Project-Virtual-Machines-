@@ -1,0 +1,493 @@
+/* Base styling */
+:root {
+  --primary-color: #3a86ff;
+  --primary-color-rgb: 58, 134, 255;
+  --secondary-color: #8338ec;
+  --secondary-color-rgb: 131, 56, 236;
+  --success-color: #06d6a0;
+  --success-color-rgb: 6, 214, 160;
+  --danger-color: #ef476f;
+  --danger-color-rgb: 239, 71, 111;
+  --warning-color: #ffd166;
+  --warning-color-rgb: 255, 209, 102;
+  --card-bg: #ffffff;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --bg-main: #f8f9fa;
+  --nav-active: #3a86ff;
+  --nav-hover: #e9ecef;
+  --navbar-bg: #ffffff;
+  --border-radius: 12px;
+  --transition-speed: 0.3s;
+}
+
+/* Dark mode variables */
+[data-bs-theme="dark"] {
+  --primary-color: #4361ee;
+  --primary-color-rgb: 67, 97, 238;
+  --secondary-color: #9d4edd;
+  --secondary-color-rgb: 157, 78, 221;
+  --success-color: #0cce9e;
+  --success-color-rgb: 12, 206, 158;
+  --danger-color: #ff6b6b;
+  --danger-color-rgb: 255, 107, 107;
+  --warning-color: #ffca3a;
+  --warning-color-rgb: 255, 202, 58;
+  --card-bg: #242526;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --text-primary: #f5f5f5;
+  --text-secondary: #b0b3b8;
+  --bg-main: #18191a;
+  --nav-active: #4361ee;
+  --nav-hover: #3a3b3c;
+  --navbar-bg: #242526;
+}
+
+/* App container */
+.App {
+  min-height: 100vh;
+  background-color: var(--bg-main);
+  transition: background-color var(--transition-speed) ease;
+  color: var(--text-primary);
+}
+
+/* Navbar styling */
+.navbar-themed {
+  background-color: var(--navbar-bg) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  transition: all var(--transition-speed) ease;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  letter-spacing: 0.5px;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  transition: all var(--transition-speed) ease;
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  font-size: 1.2rem;
+}
+
+/* Navigation */
+.nav-container {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  box-shadow: var(--card-shadow);
+  transition: all var(--transition-speed) ease;
+}
+
+.nav-pills .nav-link.active {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  box-shadow: 0 4px 15px rgba(58, 134, 255, 0.3);
+  color: white !important;
+  transform: translateY(-2px);
+}
+
+.nav-pills .nav-link {
+  color: var(--text-primary);
+  border-radius: var(--border-radius);
+  margin-bottom: 0.5rem;
+  padding: 0.75rem 1rem;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.nav-pills .nav-link:hover:not(.active) {
+  background-color: var(--nav-hover);
+  transform: translateY(-1px);
+}
+
+/* Card styling */
+.card {
+  background-color: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  border: none;
+  border-radius: var(--border-radius);
+  transition: all var(--transition-speed) ease;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+  background-size: 200% 200%;
+  color: white;
+  font-weight: 600;
+  padding: 1rem 1.25rem;
+  animation: gradientAnimation 5s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Form styling */
+.form-control, .form-select {
+  border-radius: var(--border-radius);
+  padding: 0.625rem 0.75rem;
+  border: 1px solid rgba(0,0,0,0.1);
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  transition: all var(--transition-speed) ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(58, 134, 255, 0.25);
+}
+
+/* Button styling */
+.btn {
+  border-radius: var(--border-radius);
+  padding: 0.625rem 1.25rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  border: none;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(58, 134, 255, 0.4);
+}
+
+/* Alert styling */
+.alert {
+  border-radius: var(--border-radius);
+  border: none;
+}
+
+/* Table styling */
+table {
+  color: var(--text-primary) !important;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(58, 134, 255, 0.05);
+}
+
+/* Progress bars */
+.progress {
+  height: 0.75rem;
+  border-radius: 1rem;
+  background-color: rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  border-radius: 1rem;
+}
+
+/* System Resources Card */
+.resource-card {
+  border: none;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.resource-card .card-header {
+  padding: 0.85rem 1.25rem;
+  font-weight: 600;
+}
+
+.resource-metrics {
+  padding: 0.5rem 0;
+}
+
+.resource-metric {
+  position: relative;
+  padding: 0.75rem 0;
+}
+
+.resource-icon {
+  color: var(--primary-color);
+  width: 20px;
+  text-align: center;
+}
+
+.resource-value {
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.05);
+  font-size: 0.9rem;
+}
+
+[data-bs-theme="dark"] .resource-value {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.custom-progress {
+  height: 0.65rem;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.custom-progress .progress-bar {
+  background-size: 20px 20px;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  animation: progress-bar-animation 2s linear infinite;
+}
+
+@keyframes progress-bar-animation {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 20px 0;
+  }
+}
+
+/* VM List styling */
+.vm-list-card {
+  border: none;
+}
+
+.vm-table-container {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.vm-table {
+  margin-bottom: 0;
+}
+
+.vm-table thead th {
+  background: linear-gradient(90deg, rgba(var(--primary-color-rgb), 0.1), rgba(var(--secondary-color-rgb), 0.1));
+  border-bottom: 2px solid var(--primary-color);
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+}
+
+.vm-table tbody tr {
+  transition: all var(--transition-speed) ease;
+}
+
+.vm-table tbody tr:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.05);
+  transform: translateY(-2px);
+}
+
+.vm-id-badge {
+  display: inline-block;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.9rem;
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--primary-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius);
+}
+
+.stop-vm-btn {
+  transition: all 0.2s ease;
+}
+
+.stop-vm-btn:hover {
+  transform: scale(1.05);
+}
+
+.cpu-badge, .memory-badge {
+  font-weight: 500;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--border-radius);
+}
+
+.refresh-button {
+  border-radius: var(--border-radius);
+  padding: 0.35rem 0.75rem;
+}
+
+.refresh-button .fa-spin {
+  animation: fa-spin 1s infinite linear;
+}
+
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Form styles for the futuristic UI */
+.form-card {
+  transition: all var(--transition-speed) ease;
+}
+
+.form-control-modern {
+  border-radius: var(--border-radius);
+  padding: 0.625rem 0.75rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  transition: all var(--transition-speed) ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.form-control-modern:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25);
+  transform: translateY(-1px);
+}
+
+.input-icon-wrapper {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-color);
+  z-index: 2;
+}
+
+.btn-modern {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  border: none;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.btn-modern:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(var(--primary-color-rgb), 0.4);
+}
+
+.btn-modern:active {
+  transform: translateY(0);
+}
+
+.animated-form .form-group {
+  transition: all 0.3s ease;
+}
+
+.animated-form .form-group:hover {
+  transform: translateX(2px);
+}
+
+/* Form field focus effects */
+.form-control:focus, .form-select:focus {
+  box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25);
+  border-color: var(--primary-color);
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+/* VM Info Alert and Code Display */
+.vm-info-alert {
+  border-left: 4px solid var(--primary-color);
+  background: linear-gradient(to right, rgba(var(--primary-color-rgb), 0.05), transparent);
+}
+
+.vm-code {
+  font-family: 'Roboto Mono', monospace;
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--primary-color);
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+code {
+  font-family: 'Roboto Mono', monospace;
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--primary-color);
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+}
+
+.card-header {
+  background-color: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  font-weight: 600;
+  padding: 1rem 1.25rem;
+}
+
+.table th {
+  border-top: none;
+  background-color: #f8f9fa;
+}
+
+.badge {
+  padding: 0.5em 0.75em;
+  font-weight: 500;
+}
+
+.btn {
+  border-radius: 0.25rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}

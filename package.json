@@ -1,0 +1,16 @@
+{
+  "name": "vm-manager",
+  "version": "1.0.0",
+  "description": "Virtual Machine Manager with React frontend and Node.js backend",
+  "main": "start.js",
+  "scripts": {
+    "start": "node start.js",
+    "server": "cd server && npm start",
+    "client": "cd client && npm start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
