@@ -10,6 +10,7 @@ const { ensureDirectoryExists } = require('./utils/systemUtils');
 const diskRoutes = require('./routes/diskRoutes');
 const vmRoutes = require('./routes/vmRoutes').router;
 const systemResourcesRoutes = require('./routes/systemResourcesRoutes');
+const dockerRoutes = require('./routes/dockerRoutes');
 
 // Create Express app
 const app = express();
@@ -25,10 +26,11 @@ ensureDirectoryExists(config.DISK_DIR);
 app.use('/api/disks', diskRoutes);
 app.use('/api/vms', vmRoutes);
 app.use('/api/system-resources', systemResourcesRoutes);
+app.use('/api/docker', dockerRoutes);
 
 // Root route for API status
 app.get('/api', (req, res) => {
-    res.json({ 
+    res.json({
         message: 'VM Manager API is running',
         version: '1.0.0'
     });

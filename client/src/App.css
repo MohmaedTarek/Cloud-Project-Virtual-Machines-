@@ -491,3 +491,20 @@ code {
   border-color: #80bdff;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
+
+/* Docker styles */
+.nav-divider {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+pre {
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
