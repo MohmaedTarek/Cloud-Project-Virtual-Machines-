@@ -20,6 +20,9 @@ const DockerImagesList = () => {
     });
     const [runError, setRunError] = useState(null);
     const [runSuccess, setRunSuccess] = useState(null);
+    const [deletingImages, setDeletingImages] = useState({});
+    const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
+    const [imageToDelete, setImageToDelete] = useState(null);
 
     const fetchImages = async () => {
         setLoading(true);
@@ -43,8 +46,10 @@ const DockerImagesList = () => {
 
     const handleRunClick = (image) => {
         setSelectedImage(image);
+        // Generate a unique container name with timestamp to avoid conflicts
+        const timestamp = new Date().getTime().toString().slice(-6); // Last 6 digits of timestamp
         setContainerConfig({
-            containerName: `${image.repository}-container`,
+            containerName: `${image.repository}-${timestamp}`,
             hostPort: '4080',
             containerPort: '3000'
         });
@@ -53,10 +58,39 @@ const DockerImagesList = () => {
         setShowModal(true);
     };
 
+    const handleDeleteClick = (image) => {
+        setImageToDelete(image);
+        setDeleteConfirmModal(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!imageToDelete) return;
+
+        const imageId = imageToDelete.id;
+        setDeletingImages(prev => ({ ...prev, [imageId]: true }));
+
+        try {
+            await axios.delete(`${API_URL}/docker/images/${imageId}`);
+            // Remove the deleted image from the state
+            setImages(images.filter(img => img.id !== imageId));
+            setDeleteConfirmModal(false);
+            setImageToDelete(null);
+        } catch (err) {
+            setError(err.response?.data?.error || `Failed to delete image: ${imageId}`);
+        } finally {
+            setDeletingImages(prev => ({ ...prev, [imageId]: false }));
+        }
+    };
+
     const handleModalClose = () => {
         setShowModal(false);
         setRunError(null);
         setRunSuccess(null);
+    };
+
+    const handleDeleteModalClose = () => {
+        setDeleteConfirmModal(false);
+        setImageToDelete(null);
     };
 
     const handleInputChange = (e) => {
@@ -90,7 +124,21 @@ const DockerImagesList = () => {
             // This assumes you have a way to refresh the containers list in another component
             // You might want to implement a context or other state management for this
         } catch (err) {
-            setRunError(err.response?.data?.error || 'Error running container');
+            // Check if error is related to container name conflict
+            const errorMessage = err.response?.data?.details || err.message || 'Error running container';
+            if (errorMessage.includes('is already in use')) {
+                setRunError('Container name already in use. A unique name has been generated for you. Please try again.');
+                // Generate a new unique name for next attempt
+                const newTimestamp = new Date().getTime().toString().slice(-6);
+                setContainerConfig(prev => ({
+                    ...prev,
+                    containerName: `${selectedImage.repository}-${newTimestamp}`
+                }));
+            } else if (errorMessage.includes('port is already allocated')) {
+                setRunError('Port already in use. Please choose a different host port and try again.');
+            } else {
+                setRunError(err.response?.data?.error || errorMessage);
+            }
         } finally {
             setRunningContainer(false);
         }
@@ -153,13 +201,33 @@ const DockerImagesList = () => {
                                             <td>{image.size}</td>
                                             <td>{image.created}</td>
                                             <td>
-                                                <Button 
-                                                    variant="primary" 
-                                                    size="sm" 
-                                                    onClick={() => handleRunClick(image)}
-                                                >
-                                                    Run Container
-                                                </Button>
+                                                <div className="d-flex gap-2">
+                                                    <Button
+                                                        variant="primary"
+                                                        size="sm"
+                                                        onClick={() => handleRunClick(image)}
+                                                    >
+                                                        Run
+                                                    </Button>
+                                                    <Button
+                                                        variant="danger"
+                                                        size="sm"
+                                                        onClick={() => handleDeleteClick(image)}
+                                                        disabled={deletingImages[image.id]}
+                                                    >
+                                                        {deletingImages[image.id] ? (
+                                                            <Spinner
+                                                                as="span"
+                                                                animation="border"
+                                                                size="sm"
+                                                                role="status"
+                                                                aria-hidden="true"
+                                                            />
+                                                        ) : (
+                                                            'Delete'
+                                                        )}
+                                                    </Button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}
@@ -196,6 +264,19 @@ const DockerImagesList = () => {
                             <hr />
                             <p className="mb-0"><strong>Container ID:</strong> {runSuccess.containerId}</p>
                             <p className="mb-0"><strong>Ports:</strong> {runSuccess.details.ports}</p>
+                            <div className="mt-3">
+                                <Button
+                                    variant="primary"
+                                    size="sm"
+                                    onClick={() => window.open(`http://localhost:${containerConfig.hostPort}`, '_blank')}
+                                >
+                                    <i className="fas fa-external-link-alt me-1"></i>
+                                    Open in Browser
+                                </Button>
+                                <small className="text-muted ms-2">
+                                    Opens http://localhost:{containerConfig.hostPort}
+                                </small>
+                            </div>
                         </Alert>
                     )}
 
@@ -208,6 +289,9 @@ const DockerImagesList = () => {
                                 value={containerConfig.containerName}
                                 onChange={handleInputChange}
                             />
+                            <Form.Text className="text-muted">
+                                A unique name for your container. Each container must have a unique name.
+                            </Form.Text>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
@@ -262,6 +346,52 @@ const DockerImagesList = () => {
                             </>
                         ) : (
                             'Run Container'
+                        )}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Delete Confirmation Modal */}
+            <Modal show={deleteConfirmModal} onHide={handleDeleteModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Deletion</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {imageToDelete && (
+                        <div>
+                            <p>Are you sure you want to delete this image?</p>
+                            <p><strong>Repository:</strong> {imageToDelete.repository}</p>
+                            <p><strong>Tag:</strong> {imageToDelete.tag}</p>
+                            <p><strong>ID:</strong> {imageToDelete.id}</p>
+                            <Alert variant="warning">
+                                This action cannot be undone. This will permanently delete the image.
+                            </Alert>
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleDeleteModalClose}>
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="danger"
+                        onClick={confirmDelete}
+                        disabled={deletingImages[imageToDelete?.id]}
+                    >
+                        {deletingImages[imageToDelete?.id] ? (
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                    className="me-2"
+                                />
+                                Deleting...
+                            </>
+                        ) : (
+                            'Delete Image'
                         )}
                     </Button>
                 </Modal.Footer>

@@ -18,6 +18,8 @@ import DockerImagesList from './components/DockerImagesList';
 import DockerContainersList from './components/DockerContainersList';
 import { DockerStatusProvider } from './components/DockerStatusContext';
 import DockerStatusAlert from './components/DockerStatusAlert';
+import SearchDockerImages from './components/SearchDockerImages';
+import SearchDockerHub from './components/SearchDockerHub';
 
 const API_URL = 'http://localhost:5000/api';
 
@@ -120,6 +122,18 @@ function App() {
                             </Nav.Link>
                           </Nav.Item>
                           <Nav.Item>
+                            <Nav.Link eventKey="searchLocalImages">
+                              <i className="fas fa-search me-2"></i>
+                              Search Local Images
+                            </Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link eventKey="searchDockerHub">
+                              <i className="fas fa-globe me-2"></i>
+                              Search DockerHub
+                            </Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
                             <Nav.Link eventKey="dockerContainers">
                               <i className="fas fa-cubes me-2"></i>
                               Running Containers
@@ -154,6 +168,14 @@ function App() {
                         <Tab.Pane eventKey="dockerImages">
                           <DockerStatusAlert />
                           <DockerImagesList />
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="searchLocalImages">
+                          <DockerStatusAlert />
+                          <SearchDockerImages />
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="searchDockerHub">
+                          <DockerStatusAlert />
+                          <SearchDockerHub />
                         </Tab.Pane>
                         <Tab.Pane eventKey="dockerContainers">
                           <DockerStatusAlert />
